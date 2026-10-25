@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="titulo-pagina">rodrigol4k</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#facc15',
+                            goldDark: '#eab308',
+                            darkBg: '#0f0f13',
+                            cardBg: '#1a1a24',
+                            border: '#2a2a3a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glow-gold {
+            text-shadow: 0 0 30px rgba(250, 204, 21, 0.6), 0 0 60px rgba(250, 204, 21, 0.3);
+        }
+
+        .hdr-dv-badge {
+            background: linear-gradient(90deg, #b45309, #facc15);
+            color: #000;
+        }
+
+        .p1080-badge {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-gold-gradient {
+            background: linear-gradient(90deg, #facc15, #eab308);
+        }
+
+        /* Dark Mode Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+    </style>
+</head>
+<body class="bg-[#0f0f13] text-gray-100 min-h-screen selection:bg-yellow-400 selection:text-black">
+
+    <!-- ==================== 1. PÁGINA DE INICIO ==================== -->
+    <div id="pagina-inicio" class="min-h-screen flex flex-col justify-center items-center text-center p-6 bg-gradient-to-br from-[#050507] via-[#1a1a2e] to-[#16213e] relative overflow-hidden">
+        <!-- Elementos de luz ambiental -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-xl">
+            <h1 class="text-6xl sm:text-7xl font-extrabold text-yellow-400 glow-gold mb-4 tracking-wider">
+                rodrigol4k
+            </h1>
+            <p class="text-lg sm:text-xl text-slate-300 mb-8 font-medium">
+                Catálogo Premium • 2160p HDR DV • 1080p REMUX
+            </p>
+            <p class="text-xs text-yellow-400/80 uppercase tracking-widest font-semibold mb-10">
+                Colección Completa Marvel (2008 - 2024) + Especiales
+            </p>
+            <button onclick="entrar()" class="btn-gold-gradient text-black font-bold text-lg px-10 py-4 rounded-full shadow-lg shadow-yellow-500/30 hover:shadow-yellow-500/50 hover:-translate-y-1 transform transition-all duration-300">
+                Entrar al catálogo
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== 2. PÁGINA DEL CATÁLOGO ==================== -->
+    <div id="pagina-peliculas" class="min-h-screen p-4 sm:p-8 max-w-7xl mx-auto hidden">
+        <!-- Header / Nav -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+            <button onclick="volverInicio()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-medium px-5 py-2.5 rounded-lg transition-colors w-full sm:w-auto justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Inicio
+            </button>
+            <div class="text-center">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-yellow-400">Catálogo de Películas</h2>
+                <p id="contador-peliculas" class="text-xs text-slate-400 mt-1"></p>
+            </div>
+            <div class="w-full sm:w-28 hidden sm:block"></div>
+        </div>
+
+        <!-- Buscador Dinámico en Tiempo Real -->
+        <div class="max-w-2xl mx-auto mb-8">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="input-busqueda" 
+                    oninput="filtrarPeliculas()" 
+                    placeholder="Buscar por título, año (2008, 2024...), calidad (2160p, HDR, DV)..." 
+                    class="w-full bg-[#1a1a24] border border-[#2a2a3a] text-slate-100 placeholder-slate-400 text-sm sm:text-base rounded-xl py-3.5 pl-11 pr-10 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 transition-all shadow-inner"
+                />
+                <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <button 
+                    id="btn-limpiar-busqueda" 
+                    onclick="limpiarBuscador()" 
+                    class="hidden absolute right-3.5 top-3.5 text-slate-400 hover:text-white transition-colors"
+                    title="Limpiar búsqueda"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Grid Contenedor de Películas -->
+        <div id="contenedor-peliculas" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+            <!-- Renderizado dinámico vía JavaScript -->
+        </div>
+
+        <!-- Estado Sin Resultados -->
+        <div id="mensaje-sin-resultados" class="hidden text-center py-16">
+            <svg class="w-16 h-16 text-slate-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h18M3 16h18"/>
+            </svg>
+            <p class="text-xl text-slate-400 font-medium">No se encontraron películas que coincidan con tu búsqueda.</p>
+            <button onclick="limpiarBuscador()" class="mt-4 text-yellow-400 hover:underline font-semibold text-sm">Ver todo el catálogo</button>
+        </div>
+    </div>
+
+    <!-- ==================== 3. PÁGINA DE DETALLE ==================== -->
+    <div id="pagina-detalle" class="min-h-screen p-4 sm:p-8 hidden">
+        <div class="max-w-xl mx-auto">
+            <button onclick="volverCatalogo()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-medium px-5 py-2.5 rounded-lg transition-colors mb-6">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Volver al catálogo
+            </button>
+
+            <!-- Poster Vista Sincronizado -->
+            <div id="poster-vista-contenedor" class="w-full aspect-[2/3] max-h-[460px] bg-[#27272a] rounded-xl overflow-hidden mb-6 border border-[#2a2a3a] shadow-2xl relative flex items-center justify-center">
+                <div id="texto-poster" class="w-full h-full"></div>
+            </div>
+
+            <!-- Título y Calidad -->
+            <h2 id="nombre-pelicula" class="text-2xl sm:text-3xl font-extrabold text-white mb-2 leading-tight">Título de la película</h2>
+            <div class="flex items-center gap-3 mb-6">
+                <span id="etiqueta-detalle" class="inline-block px-3.5 py-1 rounded-full text-xs font-bold tracking-wider"></span>
+                <span id="anio-detalle" class="text-slate-400 text-sm font-semibold"></span>
+            </div>
+
+            <!-- Panel de Información -->
+            <div class="bg-[#1a1a24] p-6 rounded-2xl border border-[#2a2a3a] shadow-xl space-y-6">
+                <div>
+                    <h3 class="text-yellow-400 font-bold text-base mb-2 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Sinopsis
+                    </h3>
+                    <p id="sinopsis-pelicula" class="text-slate-300 leading-relaxed text-sm sm:text-base">Sinopsis aquí...</p>
+                </div>
+
+                <div>
+                    <h3 class="text-yellow-400 font-bold text-base mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Opciones de descarga
+                    </h3>
+                    <div id="contenedor-descargas" class="flex flex-wrap gap-2.5">
+                        <a href="#" onclick="clickDescarga('Mega'); return false;" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg font-bold text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                            Mega
+                        </a>
+                        <a href="#" onclick="clickDescarga('Mediafire'); return false;" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg font-bold text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                            Mediafire
+                        </a>
+                        <a href="#" onclick="clickDescarga('Mega 2'); return false;" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg font-bold text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                            Mega 2
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <button onclick="toggleMediaInfo()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-2.5 rounded-lg text-sm transition-colors shadow-lg shadow-purple-600/20 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Ver MediaInfo
+                    </button>
+                    <div id="caja-mediainfo" class="bg-[#111827] border border-slate-700 rounded-xl p-4 mt-4 font-mono text-xs text-slate-300 leading-relaxed hidden space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-yellow-400 text-black font-bold px-5 py-3 rounded-xl shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 transform translate-y-4">
+        <span id="toast-mensaje">Notificación</span>
+    </div>
+
+    <!-- ==================== LÓGICA DE JAVASCRIPT Y CATALOGO MCU COMPLETO ==================== -->
+    <script>
+        // Catálogo Completo: Marvel MCU (2008-2024), Freddy vs Jason, Spider-Man, X-Men y Érase una vez en Hollywood
+        const peliculas = [
+            // --- ESPECIALES Y CLÁSICOS ---
+            {
+                id: 101,
+                nombre: "Freddy contra Jason",
+                anio: "2003",
+                calidad: "1080p",
+                clase: "p1080-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/v3e2sR8U0JmFw5AOb0MhAnXp22g.jpg",
+                sinopsis: "Dos de los más grandes íconos del terror del cine chocan en una batalla sangrienta. Freddy Krueger resucita a Jason Voorhees para aterrorizar a la calle Elm, pero pronto se da cuenta de que Jason no se detendrá tan fácilmente.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 9.2 GB<br>Duración: 1 h 37 min", video: "Resolución: 1920 x 1080<br>FPS: 23.976<br>Codec: AVC", audio: "Español Latino AC3 5.1 / Inglés DTS-HD MA 5.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 102,
+                nombre: "Spider-Man 2",
+                anio: "2004",
+                calidad: "1080p",
+                clase: "p1080-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/olx2P3Srmk8L6C3T2X4I68RSoU1.jpg",
+                sinopsis: "Peter Parker lucha por equilibrar su vida como estudiante y sus deberes como héroe. Mientras tanto, Otto Octavius se convierte en el temible Doctor Octopus.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 8.2 GB<br>Duración: 2 h 7 min", video: "Resolución: 1920 x 1080<br>FPS: 23.976<br>Codec: AVC", audio: "Español Latino AC3 5.1 / Inglés DTS 5.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 103,
+                nombre: "X-Men 2",
+                anio: "2003",
+                calidad: "1080p",
+                clase: "p1080-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/A01A02vS19zM02381203s0.jpg",
+                sinopsis: "Tras un intento de asesinato al presidente, los X-Men se ven obligados a aliarse con Magneto para detener a William Stryker y su plan de destruir a los mutantes.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 9.5 GB<br>Duración: 2 h 13 min", video: "Resolución: 1920 x 1080<br>FPS: 23.976<br>Codec: AVC", audio: "Español Latino AC3 5.1 / Inglés DTS 5.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 104,
+                nombre: "X-Men: Días del Futuro Pasado",
+                anio: "2014",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/3oL3M9d2p311u0sS386S2910u92.jpg",
+                sinopsis: "Con los mutantes al borde de la extinción por culpa de los Centinelas, Wolverine viaja al pasado para cambiar la historia y salvar el futuro.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 42.1 GB<br>Duración: 2 h 12 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision / HDR10<br>Codec: HEVC", audio: "Español Latino E-AC3 5.1 / Inglés DTS-HD MA 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 105,
+                nombre: "Érase una vez en Hollywood",
+                anio: "2019",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/8j58i3w9210085aK93S98211k0s.jpg",
+                sinopsis: "En Los Ángeles de 1969, el actor de televisión Rick Dalton y su doble de acción Cliff Booth luchan por abrirse camino en una industria que ya no reconocen.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 47.8 GB<br>Duración: 2 h 41 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision / HDR10<br>Codec: HEVC", audio: "Español Latino E-AC3 5.1 / Inglés DTS-HD MA 5.1", subtitulos: "Español, Inglés" }
+            },
+
+            // --- UNIVERSO CINEMATOGRÁFICO DE MARVEL (2008 - 2024 COMPLETO) ---
+            {
+                id: 1,
+                nombre: "Iron Man",
+                anio: "2008",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/7829s29103859s83021.jpg",
+                sinopsis: "El multimillonario e industrial Tony Stark es secuestrado por terroristas en Afganistán. Utilizando sus conocimientos, construye una armadura de alta tecnología para escapar y combatir el mal.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 45.3 GB<br>Duración: 2 h 6 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision / HDR10", audio: "Español Latino E-AC3 5.1 / Inglés TrueHD Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 2,
+                nombre: "El Increíble Hulk",
+                anio: "2008",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/26938491823901s923.jpg",
+                sinopsis: "Bruce Banner busca desesperadamente una cura para la radiación gamma que infectó sus células y lo convierte en una criatura de furia incontrolable.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 41.2 GB<br>Duración: 1 h 52 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision / HDR10", audio: "Español Latino E-AC3 5.1 / Inglés DTS-X", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 3,
+                nombre: "Iron Man 2",
+                anio: "2010",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/693810293810293.jpg",
+                sinopsis: "Con el mundo entero consciente de que él es Iron Man, Tony Stark debe enfrentarse al deterioro de su salud y a un vengativo villano ruso con tecnología similar.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 48.0 GB<br>Duración: 2 h 4 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 4,
+                nombre: "Thor",
+                anio: "2011",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/pr4301928301928301.jpg",
+                sinopsis: "El arrogante dios Thor es desterrado de Asgard a la Tierra por su padre Odín. Allí deberá aprender humildad mientras se convierte en el protector de la humanidad.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 43.5 GB<br>Duración: 1 h 55 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 5,
+                nombre: "Capitán América: El Primer Vengador",
+                anio: "2011",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/9482018239018239.jpg",
+                sinopsis: "Durante la Segunda Guerra Mundial, el frágil Steve Rogers se somete a un experimento militar que lo convierte en el súper soldado Capitán América.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 46.2 GB<br>Duración: 2 h 4 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 6,
+                nombre: "Los Vengadores",
+                anio: "2012",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/Ry938201823019283.jpg",
+                sinopsis: "Nick Fury recluta a Iron Man, Capitán América, Thor, Hulk, Viuda Negra y Ojo de Halcón para formar un equipo que detenga al malvado Loki y su ejército extraterrestre.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 52.1 GB<br>Duración: 2 h 23 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 7,
+                nombre: "Iron Man 3",
+                anio: "2013",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/QH9102830192830192.jpg",
+                sinopsis: "Un traumatizado Tony Stark enfrenta a un terrorista conocido como El Mandarín, quien destruye su mundo personal obligándolo a confiar en su propio ingenio.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 49.8 GB<br>Duración: 2 h 10 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 8,
+                nombre: "Thor: Un Mundo Oscuro",
+                anio: "2013",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/q92810293810293810.jpg",
+                sinopsis: "Thor debe aliarse con su traicionero hermano Loki para salvar los Nueve Reinos de los Elfos Oscuros liderados por Malekith.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 44.1 GB<br>Duración: 1 h 52 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 9,
+                nombre: "Capitán América: El Soldado del Invierno",
+                anio: "2014",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/t92810293810293810.jpg",
+                sinopsis: "Steve Rogers descubre una conspiración dentro de S.H.I.E.L.D. mientras enfrenta a un misterioso y mortal asesino conocido como el Soldado del Invierno.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 50.4 GB<br>Duración: 2 h 16 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 10,
+                nombre: "Guardianes de la Galaxia",
+                anio: "2014",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/y92810293810293810.jpg",
+                sinopsis: "Un grupo de desajustados intergalácticos liderados por Peter Quill debe unirse para evitar que un fanático guerrero destruya el universo con una poderosa gema.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 48.9 GB<br>Duración: 2 h 1 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 11,
+                nombre: "Vengadores: La Era de Ultrón",
+                anio: "2015",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/u92810293810293810.jpg",
+                sinopsis: "Cuando Tony Stark intenta reactivar un programa de mantenimiento de la paz, la inteligencia artificial Ultrón cobra vida y busca la extinción humana.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 54.3 GB<br>Duración: 2 h 21 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 12,
+                nombre: "Ant-Man",
+                anio: "2015",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/i92810293810293810.jpg",
+                sinopsis: "El ladrón Scott Lang obtiene un traje con la capacidad de encogerse en escala pero aumentar en fuerza, debiendo ayudar a su mentor a proteger el secreto.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 43.9 GB<br>Duración: 1 h 57 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 13,
+                nombre: "Capitán América: Civil War",
+                anio: "2016",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/o92810293810293810.jpg",
+                sinopsis: "La presión política para controlar a los Vengadores provoca una brecha ideológica entre el Capitán América y Iron Man, dividiendo al equipo.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 56.1 GB<br>Duración: 2 h 27 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 14,
+                nombre: "Doctor Strange",
+                anio: "2016",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/p92810293810293810.jpg",
+                sinopsis: "Tras sufrir un accidente automovilístico que arruina sus manos, un brillante neurocirujano aprende las artes místicas para proteger el multiverso.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 47.0 GB<br>Duración: 1 h 55 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 15,
+                nombre: "Guardianes de la Galaxia Vol. 2",
+                anio: "2017",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/a92810293810293810.jpg",
+                sinopsis: "Los Guardianes luchan por mantenerse unidos mientras atraviesan los confines del cosmos y desvelan el misterio del verdadero linaje de Peter Quill.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 51.5 GB<br>Duración: 2 h 16 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 16,
+                nombre: "Spider-Man: Homecoming",
+                anio: "2017",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/c92810293810293810.jpg",
+                sinopsis: "Peter Parker intenta equilibrar su vida de estudiante de secundaria con su trabajo como el superhéroe Spider-Man bajo la tutela de Tony Stark.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 49.0 GB<br>Duración: 2 h 13 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés TrueHD Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 17,
+                nombre: "Thor: Ragnarok",
+                anio: "2017",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/d92810293810293810.jpg",
+                sinopsis: "Thor está encarcelado al otro lado del universo sin su poderoso martillo y debe ganar un duelo contra Hulk para regresar y detener el Ragnarok.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 48.6 GB<br>Duración: 2 h 10 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 18,
+                nombre: "Black Panther",
+                anio: "2018",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/e92810293810293810.jpg",
+                sinopsis: "T'Challa regresa a su hogar en la nación africana oculta de Wakanda para asumir su puesto como rey, pero descubre que su trono es disputado.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 52.8 GB<br>Duración: 2 h 14 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 19,
+                nombre: "Vengadores: Infinity War",
+                anio: "2018",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/7WsyChLLEz33B32312938s2.jpg",
+                sinopsis: "Los Vengadores y sus aliados deben estar dispuestos a sacrificarlo todo en un intento por derrotar al poderoso Thanos antes de que reúna las seis Gemas del Infinito.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 58.4 GB<br>Duración: 2 h 29 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 20,
+                nombre: "Ant-Man y la Avispa",
+                anio: "2018",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/f92810293810293810.jpg",
+                sinopsis: "Scott Lang lidia con las consecuencias de sus elecciones como superhéroe y padre, mientras se embarca en una nueva misión junto a Hope van Dyne.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 45.7 GB<br>Duración: 1 h 58 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 21,
+                nombre: "Capitana Marvel",
+                anio: "2019",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/g92810293810293810.jpg",
+                sinopsis: "Carol Danvers se convierte en una de las heroínas más poderosas del universo cuando la Tierra queda atrapada en medio de una guerra galáctica entre dos razas alienígenas.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 47.9 GB<br>Duración: 2 h 4 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 22,
+                nombre: "Vengadores: Endgame",
+                anio: "2019",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK18ip9G3238s.jpg",
+                sinopsis: "Tras los devastadores eventos de Infinity War, el universo está en ruinas. Con la ayuda de los aliados restantes, los Vengadores se reúnen para revertir las acciones de Thanos.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 64.2 GB<br>Duración: 3 h 1 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 23,
+                nombre: "Spider-Man: Lejos de Casa",
+                anio: "2019",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/h92810293810293810.jpg",
+                sinopsis: "Peter Parker emprende un viaje escolar a Europa, pero sus planes de descansar se ven interrumpidos cuando Nick Fury le recluta para investigar misteriosos ataques.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 51.0 GB<br>Duración: 2 h 9 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 24,
+                nombre: "Viuda Negra",
+                anio: "2021",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/j92810293810293810.jpg",
+                sinopsis: "Natasha Romanoff confronta las partes más oscuras de su vida cuando surge una peligrosa conspiración con lazos con su pasado como espía.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 49.3 GB<br>Duración: 2 h 14 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 25,
+                nombre: "Shang-Chi y la Leyenda de los Diez Anillos",
+                anio: "2021",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/k92810293810293810.jpg",
+                sinopsis: "Shang-Chi debe enfrentarse al pasado que pensó haber dejado atrás cuando se ve atraído por la red de la misteriosa organización de los Diez Anillos.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 53.0 GB<br>Duración: 2 h 12 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 26,
+                nombre: "Eternals",
+                anio: "2021",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/l92810293810293810.jpg",
+                sinopsis: "Los Eternos, una raza de seres inmortales con poderes sobrehumanos que han vivido en secreto en la Tierra durante miles de años, se reúnen para proteger a la humanidad.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 57.8 GB<br>Duración: 2 h 36 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 27,
+                nombre: "Spider-Man: Sin Camino a Casa",
+                anio: "2021",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/1g0dhY21039812039812039.jpg",
+                sinopsis: "Con la identidad de Spider-Man revelada, Peter pide ayuda al Doctor Strange. Pero un hechizo fallido desata villanos de otros universos multiversales.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 61.5 GB<br>Duración: 2 h 28 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés DTS-HD MA 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 28,
+                nombre: "Doctor Strange en el Multiverso de la Locura",
+                anio: "2022",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/m92810293810293810.jpg",
+                sinopsis: "El Dr. Stephen Strange viaja a lo desconocido con la ayuda de aliados místicos para atravesar las peligrosas realidades alternas del Multiverso.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 51.2 GB<br>Duración: 2 h 6 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 29,
+                nombre: "Thor: Love and Thunder",
+                anio: "2022",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/n92810293810293810.jpg",
+                sinopsis: "Thor emprende un viaje diferente a todo lo que ha enfrentado: una búsqueda de paz interior. Pero su retiro se ve interrumpido por un asesino galáctico.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 46.8 GB<br>Duración: 1 h 59 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 30,
+                nombre: "Black Panther: Wakanda Forever",
+                anio: "2022",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/x92810293810293810.jpg",
+                sinopsis: "La reina Ramonda, Shuri y las Dora Milaje luchan para proteger a su nación de las potencias mundiales tras la muerte del rey T'Challa.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 59.3 GB<br>Duración: 2 h 41 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 31,
+                nombre: "Ant-Man y la Avispa: Quantumania",
+                anio: "2023",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/y928102938102938101.jpg",
+                sinopsis: "Scott Lang y Hope van Dyne exploran el Reino Cuántico, interactuando con extrañas criaturas y embarcándose en una aventura junto a Kang el Conquistador.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 48.2 GB<br>Duración: 2 h 5 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 32,
+                nombre: "Guardianes de la Galaxia Vol. 3",
+                anio: "2023",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/z92810293810293810.jpg",
+                sinopsis: "Aún coleando por la pérdida de Gamora, Peter Quill debe reunir a su equipo para defender el universo y proteger a uno de los suyos.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 55.7 GB<br>Duración: 2 h 30 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 33,
+                nombre: "The Marvels",
+                anio: "2023",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/w92810293810293810.jpg",
+                sinopsis: "Carol Danvers, Kamala Khan y Monica Rambeau descubren que sus poderes se han entrelazado, lo que las obliga a trabajar juntas para salvar el universo.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 43.1 GB<br>Duración: 1 h 45 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            },
+            {
+                id: 34,
+                nombre: "Deadpool & Wolverine",
+                anio: "2024",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv-badge",
+                posterUrl: "https://image.tmdb.org/t/p/w500/8cdWjvZ2103981203981239.jpg",
+                sinopsis: "Wade Wilson vive una vida tranquila hasta que la Autoridad de Variación Temporal (TVA) lo recluta para una misión crucial. Para salvar su universo, debe formar una alianza forzada con un apático Wolverine.",
+                mediainfo: { general: "Formato: Matroska<br>Tamaño: 58.9 GB<br>Duración: 2 h 8 min", video: "Resolución: 3840 x 2160<br>HDR: Dolby Vision / HDR10+", audio: "Español Latino E-AC3 5.1 / Inglés Atmos 7.1", subtitulos: "Español, Inglés" }
+            }
+        ];
+
+        let idPeliculaActual = null;
+
+        // Renderizado del Catálogo
+        function renderizarCatalogo(lista = peliculas) {
+            const contenedor = document.getElementById('contenedor-peliculas');
+            const msjSinResultados = document.getElementById('mensaje-sin-resultados');
+            const contador = document.getElementById('contador-peliculas');
+            
+            contenedor.innerHTML = '';
+            contador.textContent = `Mostrando ${lista.length} de ${peliculas.length} películas`;
+
+            if (lista.length === 0) {
+                msjSinResultados.classList.remove('hidden');
+                return;
+            } else {
+                msjSinResultados.classList.add('hidden');
+            }
+
+            lista.forEach(p => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = "bg-[#1a1a24] rounded-xl overflow-hidden border border-[#2a2a3a] transition-all duration-300 hover:scale-[1.03] hover:border-yellow-400 hover:shadow-xl hover:shadow-black/60 cursor-pointer flex flex-col group";
+                tarjeta.onclick = () => verPelicula(p.id);
+
+                // Poster Renderizado con Fallback
+                const posterHTML = `
+                    <img src="${p.posterUrl}" alt="${p.nombre}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                    onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'flex flex-col items-center justify-center h-full text-slate-500 font-medium text-xs p-3 text-center bg-[#27272a]\\'><svg class=\\'w-8 h-8 mb-1 text-slate-600\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1.5\\' d=\\'M7 4v16M17 4v16M3 8h18M3 16h18\\'/></svg><span>${p.nombre}</span></div>';"/>
+                `;
+
+                tarjeta.innerHTML = `
+                    <div class="py-1 px-2 text-center font-bold text-[10px] sm:text-[11px] tracking-wider uppercase ${p.clase}">
+                        ${p.calidad}
+                    </div>
+                    <div class="w-full aspect-[2/3] bg-[#27272a] overflow-hidden relative">
+                        ${posterHTML}
+                        <div class="absolute bottom-2 right-2 bg-black/80 text-yellow-400 font-bold text-[10px] px-2 py-0.5 rounded backdrop-blur-sm">
+                            ${p.anio}
+                        </div>
+                    </div>
+                    <div class="p-2.5 text-slate-200 text-xs sm:text-sm font-semibold text-center bg-[#18181b] flex-grow flex items-center justify-center line-clamp-2 leading-snug">
+                        ${p.nombre}
+                    </div>
+                `;
+
+                contenedor.appendChild(tarjeta);
+            });
+        }
+
+        // Buscador Multinivel (Título, Año, Calidad)
+        function filtrarPeliculas() {
+            const input = document.getElementById('input-busqueda');
+            const query = input.value.toLowerCase().trim();
+            const btnLimpiar = document.getElementById('btn-limpiar-busqueda');
+
+            if (query.length > 0) {
+                btnLimpiar.classList.remove('hidden');
+            } else {
+                btnLimpiar.classList.add('hidden');
+            }
+
+            const resultados = peliculas.filter(p => 
+                p.nombre.toLowerCase().includes(query) ||
+                p.anio.includes(query) ||
+                p.calidad.toLowerCase().includes(query)
+            );
+
+            renderizarCatalogo(resultados);
+        }
+
+        function limpiarBuscador() {
+            const input = document.getElementById('input-busqueda');
+            input.value = '';
+            document.getElementById('btn-limpiar-busqueda').classList.add('hidden');
+            renderizarCatalogo(peliculas);
+        }
+
+        // Navegación SPA y Vistas
+        function entrar() {
+            document.getElementById('pagina-inicio').style.display = 'none';
+            document.getElementById('pagina-peliculas').style.display = 'block';
+            document.getElementById('titulo-pagina').textContent = "Catálogo • rodrigol4k";
+            renderizarCatalogo();
+        }
+
+        function volverInicio() {
+            document.getElementById('pagina-peliculas').style.display = 'none';
+            document.getElementById('pagina-inicio').style.display = 'flex';
+            document.getElementById('titulo-pagina').textContent = "rodrigol4k";
+        }
+
+        function verPelicula(id) {
+            idPeliculaActual = id;
+            const p = peliculas.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('nombre-pelicula').textContent = p.nombre;
+            document.getElementById('anio-detalle').textContent = `(${p.anio})`;
+            document.getElementById('titulo-pagina').textContent = `${p.nombre} (${p.anio}) • rodrigol4k`;
+
+            const etiqueta = document.getElementById('etiqueta-detalle');
+            etiqueta.textContent = p.calidad;
+            etiqueta.className = `inline-block px-3.5 py-1 rounded-full text-xs font-bold tracking-wider ${p.clase}`;
+
+            // Sincronización del Poster idéntico a la tarjeta seleccionada
+            const contenedorPoster = document.getElementById('texto-poster');
+            contenedorPoster.innerHTML = `
+                <img src="${p.posterUrl}" alt="${p.nombre}" class="w-full h-full object-cover rounded-xl" 
+                onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'flex flex-col items-center justify-center h-full text-slate-400 font-semibold text-lg p-4 text-center bg-[#27272a] rounded-xl\\'><span>${p.nombre}</span></div>';"/>
+            `;
+
+            document.getElementById('sinopsis-pelicula').textContent = p.sinopsis;
+            document.getElementById('caja-mediainfo').style.display = 'none';
+
+            document.getElementById('pagina-peliculas').style.display = 'none';
+            document.getElementById('pagina-detalle').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function volverCatalogo() {
+            document.getElementById('pagina-detalle').style.display = 'none';
+            document.getElementById('pagina-peliculas').style.display = 'block';
+            document.getElementById('titulo-pagina').textContent = "Catálogo • rodrigol4k";
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMediaInfo() {
+            const caja = document.getElementById('caja-mediainfo');
+            const p = peliculas.find(item => item.id === idPeliculaActual);
+            if (!p) return;
+
+            if (caja.style.display === 'none' || caja.style.display === '') {
+                caja.innerHTML = `
+                    <div><strong class="text-yellow-400">General</strong><br>${p.mediainfo.general}</div>
+                    <div><strong class="text-yellow-400">Video</strong><br>${p.mediainfo.video}</div>
+                    <div><strong class="text-yellow-400">Audio</strong><br>${p.mediainfo.audio}</div>
+                    <div><strong class="text-yellow-400">Subtítulos</strong><br>${p.mediainfo.subtitulos}</div>
+                `;
+                caja.style.display = 'block';
+            } else {
+                caja.style.display = 'none';
+            }
+        }
+
+        function clickDescarga(servidor) {
+            const p = peliculas.find(item => item.id === idPeliculaActual);
+            mostrarToast(`Iniciando enlace de "${p ? p.nombre : 'película'}" vía ${servidor}`);
+        }
+
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-mensaje');
+            msg.textContent = mensaje;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 3000);
+        }
+
+        window.onload = function() {
+            renderizarCatalogo();
+        };
+    </script>
+</body>
+</html>
