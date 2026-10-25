@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rodrigol4k</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* ===== PÁGINA DE INICIO ===== */
+        #pagina-inicio {
+            background: linear-gradient(135deg, #050507 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 4em;
+            font-weight: bold;
+            color: #facc15;
+            text-shadow: 0 0 30px rgba(250, 204, 21, 0.6), 0 0 60px rgba(250, 204, 21, 0.3);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .descripcion {
+            font-size: 1.3em;
+            color: #cbd5e1;
+            margin-bottom: 50px;
+        }
+
+        .boton-entrar {
+            background: linear-gradient(90deg, #facc15, #eab308);
+            color: #000;
+            padding: 18px 60px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(250, 204, 21, 0.4);
+        }
+
+        .boton-entrar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(250, 204, 21, 0.5);
+        }
+
+        /* ===== INTERFAZ DE PELÍCULAS ===== */
+        #pagina-peliculas {
+            background: #0f0f13;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: none;
+        }
+
+        .volver {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            transition: background 0.2s;
+        }
+
+        .volver:hover {
+            background: #334155;
+        }
+
+        h2 {
+            color: #facc15;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .contenedor-peliculas {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tarjeta-pelicula {
+            background: #1a1a24;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #2a2a3a;
+            cursor: pointer;
+        }
+
+        .tarjeta-pelicula:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: #facc15;
+        }
+
+        .etiqueta-calidad {
+            padding: 6px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+        }
+
+        .hdr-dv {
+            background: linear-gradient(90deg, #b45309, #facc15);
+            color: #000;
+        }
+
+        .p1080 {
+            background: #2563eb;
+            color: white;
+        }
+
+        .imagen-pelicula {
+            height: 200px;
+            background: #27272a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #71717a;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .imagen-pelicula .icono {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        .titulo-pelicula {
+            padding: 12px;
+            color: #e4e4e7;
+            font-size: 0.9em;
+            text-align: center;
+            background: #18181b;
+        }
+
+        /* ===== PÁGINA DE DETALLE ===== */
+        #pagina-detalle {
+            background: #0f0f13;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: none;
+            color: white;
+        }
+
+        .contenido-detalle {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contenido-detalle h2 {
+            margin-bottom: 15px;
+        }
+
+        .etiqueta-detalle {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .caja-detalle {
+            background: #1a1a24;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #2a2a3a;
+        }
+
+        .boton-descarga {
+            background: #16a34a;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .boton-descarga:hover {
+            background: #15803d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PÁGINA PRINCIPAL ===== -->
+    <div id="pagina-inicio">
+        <h1 class="logo">rodrigol4k</h1>
+        <p class="descripcion">Películas • 2160p HDR DV • 1080p</p>
+        <button class="boton-entrar" onclick="entrar()">🎬 Entrar al catálogo</button>
+    </div>
+
+    <!-- ===== CATÁLOGO DE PELÍCULAS ===== -->
+    <div id="pagina-peliculas">
+        <button class="volver" onclick="volverInicio()">← Volver</button>
+        <h2>🎬 Catálogo de Películas</h2>
+
+        <div class="contenedor-peliculas">
+            <!-- Película 1 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(1)">
+                <div class="etiqueta-calidad hdr-dv">2160p • HDR • DV</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 1 (4K)</div>
+            </div>
+
+            <!-- Película 2 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(2)">
+                <div class="etiqueta-calidad p1080">1080p</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 2 (Full HD)</div>
+            </div>
+
+            <!-- Película 3 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(3)">
+                <div class="etiqueta-calidad hdr-dv">2160p • HDR • DV</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 3 (4K)</div>
+            </div>
+
+            <!-- Película 4 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(4)">
+                <div class="etiqueta-calidad p1080">1080p</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 4 (Full HD)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PÁGINA DE DETALLE DE PELÍCULA ===== -->
+    <div id="pagina-detalle">
+        <button class="volver" onclick="volverCatalogo()">← Volver al catálogo</button>
+        <div class="contenido-detalle">
+            <h2 id="nombre-pelicula">Título de la película</h2>
+            <span id="etiqueta-detalle" class="etiqueta-detalle"></span>
+            <div class="caja-detalle">
+                <p id="info-pelicula">Información de la película...</p>
+                <a href="#" class="boton-descarga">⬇️ Descargar</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de películas
+        const peliculas = {
+            1: {
+                nombre: "Película 1 (4K)",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv",
+                info: "Calidad: 2160p HDR Dolby Vision\nIdioma: Latino / Inglés\nPeso: XX GB"
+            },
+            2: {
+                nombre: "Película 2 (Full HD)",
+                calidad: "1080p",
+                clase: "p1080",
+                info: "Calidad: 1080p\nIdioma: Latino / Inglés\nPeso: XX GB"
+            },
+            3: {
+                nombre: "Película 3 (4K)",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv",
+                info: "Calidad: 2160p HDR Dolby Vision\nIdioma: Latino / Inglés\nPeso: XX GB"
+            },
+            4: {
+                nombre: "Película 4 (Full HD)",
+                calidad: "1080p",
+                clase: "p1080",
+                info: "Calidad: 1080p\nIdioma: Latino / Inglés\nPeso: XX GB"
+            }
+        };
+
+        function entrar() {
+            document.getElementById('pagina-inicio').style.display = 'none';
+            document.getElementById('pagina-peliculas').style.display = 'block';
+        }
+
+        function volverInicio() {
+            document.getElementById('pagina-peliculas').style.display = 'none';
+            document.getElementById('pagina-inicio').style.display = 'flex';
+        }
+
+        function verPelicula(id) {
+            const p = peliculas[id];
+            document.getElementById('nombre-pelicula').textContent = p.nombre;
+            const etiqueta = document.getElementById('etiqueta-detalle');
+            etiqueta.textContent = p.calidad;
+            etiqueta.className = `etiqueta-detalle ${p.clase}`;
+            document.getElementById('info-pelicula').textContent = p.info;
+            
+            document.getElementById('pagina-peliculas').style.display = 'none';
+            document.getElementById('pagina-detalle').style.display = 'block';
+        }
+
+        function volverCatalogo() {
+            document.getElementById('pagina-detalle').style.display = 'none';
+            document.getElementById('pagina-peliculas').style.display = 'block';
+        }
+    </script>
+</body>
+  </html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rodrigol4k</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* ===== PÁGINA DE INICIO ===== */
+        #pagina-inicio {
+            background: linear-gradient(135deg, #050507 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 4em;
+            font-weight: bold;
+            color: #facc15;
+            text-shadow: 0 0 30px rgba(250, 204, 21, 0.6), 0 0 60px rgba(250, 204, 21, 0.3);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .descripcion {
+            font-size: 1.3em;
+            color: #cbd5e1;
+            margin-bottom: 50px;
+        }
+
+        .boton-entrar {
+            background: linear-gradient(90deg, #facc15, #eab308);
+            color: #000;
+            padding: 18px 60px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(250, 204, 21, 0.4);
+        }
+
+        .boton-entrar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(250, 204, 21, 0.5);
+        }
+
+        /* ===== INTERFAZ DE PELÍCULAS ===== */
+        #pagina-peliculas {
+            background: #0f0f13;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: none;
+        }
+
+        .volver {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            transition: background 0.2s;
+        }
+
+        .volver:hover {
+            background: #334155;
+        }
+
+        h2 {
+            color: #facc15;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .contenedor-peliculas {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tarjeta-pelicula {
+            background: #1a1a24;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #2a2a3a;
+            cursor: pointer;
+        }
+
+        .tarjeta-pelicula:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: #facc15;
+        }
+
+        .etiqueta-calidad {
+            padding: 6px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+        }
+
+        .hdr-dv {
+            background: linear-gradient(90deg, #b45309, #facc15);
+            color: #000;
+        }
+
+        .p1080 {
+            background: #2563eb;
+            color: white;
+        }
+
+        .imagen-pelicula {
+            height: 200px;
+            background: #27272a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #71717a;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .imagen-pelicula .icono {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        .titulo-pelicula {
+            padding: 12px;
+            color: #e4e4e7;
+            font-size: 0.9em;
+            text-align: center;
+            background: #18181b;
+        }
+
+        /* ===== PÁGINA DE DETALLE ===== */
+        #pagina-detalle {
+            background: #0f0f13;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: none;
+            color: white;
+        }
+
+        .contenido-detalle {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contenido-detalle h2 {
+            margin-bottom: 15px;
+        }
+
+        .etiqueta-detalle {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .caja-detalle {
+            background: #1a1a24;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #2a2a3a;
+        }
+
+        .boton-descarga {
+            background: #16a34a;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .boton-descarga:hover {
+            background: #15803d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PÁGINA PRINCIPAL ===== -->
+    <div id="pagina-inicio">
+        <h1 class="logo">rodrigol4k</h1>
+        <p class="descripcion">Películas • 2160p HDR DV • 1080p</p>
+        <button class="boton-entrar" onclick="entrar()">🎬 Entrar al catálogo</button>
+    </div>
+
+    <!-- ===== CATÁLOGO DE PELÍCULAS ===== -->
+    <div id="pagina-peliculas">
+        <button class="volver" onclick="volverInicio()">← Volver</button>
+        <h2>🎬 Catálogo de Películas</h2>
+
+        <div class="contenedor-peliculas">
+            <!-- Película 1 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(1)">
+                <div class="etiqueta-calidad hdr-dv">2160p • HDR • DV</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 1 (4K)</div>
+            </div>
+
+            <!-- Película 2 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(2)">
+                <div class="etiqueta-calidad p1080">1080p</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 2 (Full HD)</div>
+            </div>
+
+            <!-- Película 3 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(3)">
+                <div class="etiqueta-calidad hdr-dv">2160p • HDR • DV</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 3 (4K)</div>
+            </div>
+
+            <!-- Película 4 -->
+            <div class="tarjeta-pelicula" onclick="verPelicula(4)">
+                <div class="etiqueta-calidad p1080">1080p</div>
+                <div class="imagen-pelicula">
+                    <span class="icono">🎬</span>
+                    <span>Póster aquí</span>
+                </div>
+                <div class="titulo-pelicula">Película 4 (Full HD)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PÁGINA DE DETALLE DE PELÍCULA ===== -->
+    <div id="pagina-detalle">
+        <button class="volver" onclick="volverCatalogo()">← Volver al catálogo</button>
+        <div class="contenido-detalle">
+            <h2 id="nombre-pelicula">Título de la película</h2>
+            <span id="etiqueta-detalle" class="etiqueta-detalle"></span>
+            <div class="caja-detalle">
+                <p id="info-pelicula">Información de la película...</p>
+                <a href="#" class="boton-descarga">⬇️ Descargar</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de películas
+        const peliculas = {
+            1: {
+                nombre: "Película 1 (4K)",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv",
+                info: "Calidad: 2160p HDR Dolby Vision\nIdioma: Latino / Inglés\nPeso: XX GB"
+            },
+            2: {
+                nombre: "Película 2 (Full HD)",
+                calidad: "1080p",
+                clase: "p1080",
+                info: "Calidad: 1080p\nIdioma: Latino / Inglés\nPeso: XX GB"
+            },
+            3: {
+                nombre: "Película 3 (4K)",
+                calidad: "2160p • HDR • DV",
+                clase: "hdr-dv",
+                info: "Calidad: 2160p HDR Dolby Vision\nIdioma: Latino / Inglés\nPeso: XX GB"
+            },
+            4: {
+                nombre: "Película 4 (Full HD)",
+                calidad: "1080p",
+                clase: "p1080",
+                info: "Calidad: 1080p\nIdioma: Latino / Inglés\nPeso: XX GB"
+            }
+        };
+
+        function entrar() {
+            document.getElementById('pagina-inicio').style.display = 'none';
+            document.getElementById('pagina-peliculas').style.display = 'block';
+        }
+
+        function volverInicio() {
+            document.getElementById('pagina-peliculas').style.display = 'none';
+            document.getElementById('pagina-inicio').style.display = 'flex';
+        }
+
+        function verPelicula(id) {
+            const p = peliculas[id];
+            document.getElementById('nombre-pelicula').textContent = p.nombre;
+            const etiqueta = document.getElementById('etiqueta-detalle');
+            etiqueta.textContent = p.calidad;
+            etiqueta.className = `etiqueta-detalle ${p.clase}`;
+            document.getElementById('info-pelicula').textContent = p.info;
+            
+            document.getElementById('pagina-peliculas').style.display = 'none';
+            document.getElementById('pagina-detalle').style.display = 'block';
+        }
+
+        function volverCatalogo() {
+            document.getElementById('pagina-detalle').style.display = 'none';
+            document.getElementById('pagina-peliculas').style.display = 'block';
+        }
+    </script>
+</body>
+              </html>
